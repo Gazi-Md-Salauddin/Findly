@@ -2,12 +2,15 @@ import React from 'react';
 
 const Navbar = () => {
     return (
-        <div>
-            <h2>Findly</h2>
+        <div className="border border-2 flex justify-between w-full max-w-7xl mx-auto p-2">
+            <h2 className="flex gap-6 font-bold">Findly</h2>
             <div>
-                <p>Home</p>
-                <p>Browse Item</p>
-                <p>Home</p>
+                <ul className="flex gap-4">
+                    <li>Home</li>
+                    <li>Browse Item</li>
+                    <li>Home</li>
+                </ul>
+                
             </div>
         </div>
     );
