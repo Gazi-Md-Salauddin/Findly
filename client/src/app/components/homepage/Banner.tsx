@@ -57,11 +57,11 @@ export default function Banner() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 pt-1">
-            <button className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3.5 rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm sm:text-base">
+            <button className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3.5 rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm sm:text-base cursor-pointer">
               <PlusSquare className="w-4 h-4" />
               <span>Report Lost Item</span>
             </button>
-            <button className="inline-flex items-center space-x-2 bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 font-medium px-6 py-3.5 rounded-2xl transition-all text-sm sm:text-base shadow-sm">
+            <button className="inline-flex items-center space-x-2 bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 font-medium px-6 py-3.5 rounded-2xl transition-all text-sm sm:text-base shadow-sm cursor-pointer">
               <PlusSquare className="w-4 h-4" />
               <span>Report Found Item</span>
             </button>

@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { MapPin, Search, Plus } from "lucide-react";
+import { MapPin, Search, ArrowRight } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -59,18 +59,18 @@ export default function Navbar() {
         {/* Right: Auth & Action Button */}
         <div className="flex items-center space-x-4">
           <Link
-            href="/login"
+            href="/auth/login"
             className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors px-2 py-1.5"
           >
             Log in
           </Link>
 
           <Link
-            href="/report"
+            href="/auth/register"
             className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition-colors shadow-sm"
           >
-            <Plus className="w-4 h-4" />
-            <span>Report Item</span>
+            <span>Get Started</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
