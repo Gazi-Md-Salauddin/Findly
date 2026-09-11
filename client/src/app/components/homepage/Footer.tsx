@@ -14,19 +14,19 @@ export default function FooterSection() {
       <div className="max-w-7xl mx-auto space-y-10">
         
         {/* Top Call-to-Action Card */}
-        <div className="relative w-full rounded-2xl overflow-hidden bg-slate-900 min-h-[220px] sm:min-h-[260px] flex items-center shadow-xl">
+        <div className="relative w-full rounded-2xl overflow-hidden bg-slate-900 min-h-55 sm:min-h-65 flex items-center shadow-xl">
           
           {/* Background Image with Dark Gradient Overlay */}
           <div className="absolute inset-0 z-0">
             <Image
-              src="/images/city-skyline.jpg" // Replace with your image path
+              src="/images/city-skyline.jpg"
               alt="City skyline at dusk with person"
               fill
               className="object-cover object-right sm:object-center"
               priority
             />
             {/* Dark gradient overlay on the left to ensure text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent z-10" />
+            <div className="absolute inset-0 bg-linear-to-r from-slate-950 via-slate-900/80 to-transparent z-10" />
           </div>
 
           {/* Banner Content */}
@@ -96,21 +96,21 @@ export default function FooterSection() {
               </a>
               <a
                 href="#"
-                className="p-1 hover:text-blue-600 transition-colors"
+                className="p-1 hover:text-black transition-colors"
                 aria-label="Twitter"
               >
                 <FaXTwitter className="w-4 h-4 fill-current stroke-none" />
               </a>
               <a
                 href="#"
-                className="p-1 hover:text-blue-600 transition-colors"
+                className="p-1 hover:text-pink-600 transition-colors"
                 aria-label="Instagram"
               >
                 <FaInstagram  className="w-4 h-4" />
               </a>
               <a
                 href="#"
-                className="p-1 hover:text-blue-600 transition-colors"
+                className="p-1 hover:text-red-600 transition-colors"
                 aria-label="YouTube"
               >
                 <FaYoutube className="w-4 h-4" />

@@ -1,18 +1,56 @@
 "use client"
 import React, { useState } from "react";
+import { useForm } from 'react-hook-form';
 import Link from "next/link";
-import { MapPin, Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
+import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+
+// Validation schema (zod)
+const loginSchema = z.object({
+  email: z.email({ message: "Enter your right email" }),
+  password: z.string().min(8, "The password must be at least 8 characters")
+    .regex(/[A-Z]/, "Must be at least one capital letter")
+    .regex(/[0-9]/, "Must be at least one number"),
+})
+
+type LoginFormInputs = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [serverError, setServerError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle authentication logic here
-    console.log("Logging in with:", { email, password });
-  };
+  const router = useRouter;
+
+  const {
+      register,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm<LoginFormInputs>({
+      resolver: zodResolver(loginSchema),
+      mode: "onTouched",
+    });
+
+  const onSubmit = async (data: LoginFormInputs) => {
+      setServerError(null);
+      // Handle registration logic here
+      const { error } = await authClient.signIn.email({
+        email: data.email,
+        password: data.password,
+      });
+  
+      if (error) {
+        setServerError(error.message || "Login failed");
+        return;
+      }
+  
+      alert("Login successful");
+      router.push("/");
+    };
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
@@ -80,8 +118,8 @@ export default function LoginPage() {
           </div>
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email Field */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Email */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wide">
                 Email Address
@@ -92,16 +130,18 @@ export default function LoginPage() {
                 </div>
                 <input
                   type="email"
+                  {...register("email")}
                   required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@example.com"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                 />
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <label className="text-xs font-bold text-slate-700 tracking-wide">
@@ -120,10 +160,9 @@ export default function LoginPage() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
+                  {...register("password")}
                   required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                   className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                 />
                 <button
@@ -140,12 +179,18 @@ export default function LoginPage() {
               </div>
             </div>
 
+             {/* Server Error */}
+            {serverError && (
+              <p className="text-red-500 text-sm">{serverError}</p>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition-all shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 group"
             >
-              <span>Log in</span>
+              <span>{isSubmitting ? "Please wait..." : "Log In"}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </form>

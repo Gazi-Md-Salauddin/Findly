@@ -22,7 +22,7 @@ export default function Navbar() {
           {/* Nav Links */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link
-              href="/browse"
+              href="/all-item"
               className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
             >
               Browse Items

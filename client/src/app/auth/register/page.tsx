@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react";
+import { useForm } from 'react-hook-form';
 import Link from "next/link";
 import {
-  MapPin,
   Mail,
   Lock,
   User,
@@ -10,16 +10,41 @@ import {
   EyeOff,
   ArrowRight,
   UserPlus,
-  CheckCircle2,
 } from "lucide-react";
+import { z } from "zod"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { authClient } from "@/lib/auth-client";
+
+// Validation schema (zod)
+const registerSchema = z.object({
+  name: z.string(),
+  email: z.email({ message: "Enter your right email" }),
+  password: z.string().min(8, "The password must be at least 8 characters")
+    .regex(/[A-Z]/, "Must be at least one capital letter")
+    .regex(/[0-9]/, "Must be at least one number"),
+  confirmPassword: z.string(),
+})
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Does not match the password",
+    path: ["confirmPassword"],
+  });
+
+type RegisterFormInputs = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    agreeTerms: false,
+  const [confirmShowPassword, setConfirmShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ agreeTerms: false })
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<RegisterFormInputs>({
+    resolver: zodResolver(registerSchema),
+    mode: "onTouched",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +55,23 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: RegisterFormInputs) => {
+    setServerError(null);
     // Handle registration logic here
-    console.log("Registering user:", formData);
+    const { error } = await authClient.signUp.email({
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (error) {
+      setServerError(error.message || "Registration failed");
+      return;
+    }
+
+    reset();
+
+    alert("Registration successful");
   };
 
   return (
@@ -42,7 +80,7 @@ export default function RegisterPage() {
       {/* Main Register Form Container */}
       <main className="flex-1 flex items-center justify-center px-4 py-8">
         <div className="w-full max-w-md bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 sm:p-10">
-          
+
           {/* Header */}
           <div className="text-center space-y-2 mb-8">
             <div className="inline-flex p-3 bg-blue-50 text-blue-600 rounded-2xl mb-2">
@@ -102,7 +140,7 @@ export default function RegisterPage() {
           </div>
 
           {/* Registration Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Full Name Input */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wide">
@@ -114,13 +152,15 @@ export default function RegisterPage() {
                 </div>
                 <input
                   type="text"
-                  name="fullName"
+                  {...register("name")}
+
                   required
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                 />
+                {errors.name && (
+                  <p className="text-red-500">{errors.name.message}</p>
+                )}
               </div>
             </div>
 
@@ -135,17 +175,19 @@ export default function RegisterPage() {
                 </div>
                 <input
                   type="email"
+                  {...register("email")}
                   name="email"
                   required
-                  value={formData.email}
-                  onChange={handleChange}
                   placeholder="name@example.com"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                 />
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
             </div>
 
-            {/* Password Input */}
+            {/* Password */}
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-slate-700 tracking-wide">
                 Password
@@ -156,19 +198,55 @@ export default function RegisterPage() {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
+                  {...register("password")}
                   name="password"
                   required
-                  value={formData.password}
-                  onChange={handleChange}
                   placeholder="At least 8 characters"
                   className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
                 />
+                {errors.password && (
+                  <p>{errors.password.message}</p>
+                )}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-bold text-slate-700 tracking-wide">
+                Confirm Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  type={confirmShowPassword ? "text" : "password"}
+                  {...register("confirmPassword")}
+
+                  required
+                  placeholder="At least 8 characters"
+                  className="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition-all"
+                />
+                {errors.confirmPassword && (
+                  <p>{errors.confirmPassword.message}</p>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setConfirmShowPassword(!confirmShowPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+                >
+                  {confirmShowPassword ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />
@@ -184,7 +262,6 @@ export default function RegisterPage() {
                 id="agreeTerms"
                 name="agreeTerms"
                 required
-                checked={formData.agreeTerms}
                 onChange={handleChange}
                 className="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
               />
@@ -201,21 +278,27 @@ export default function RegisterPage() {
               </label>
             </div>
 
+            {/* Server Error */}
+            {serverError && (
+              <p className="text-red-500 text-sm">{serverError}</p>
+            )}
+
             {/* Submit Button */}
             <button
               type="submit"
+              disabled={isSubmitting}
               className="w-full mt-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-xl text-sm transition-all shadow-md shadow-blue-500/20 flex items-center justify-center space-x-2 group"
             >
-              <span>Create Account</span>
+              <span>{isSubmitting ? "Creating account..." : "Create Account"}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </form>
           <p className="text-xs sm:text-sm text-slate-500 font-medium py-4 text-center">
-          Already have an account?{" "}
-          <Link href="/auth/login" className="text-blue-600 font-semibold hover:underline">
-            Log in
-          </Link>
-        </p>
+            Already have an account?{" "}
+            <Link href="/auth/login" className="text-blue-600 font-semibold hover:underline">
+              Log in
+            </Link>
+          </p>
         </div>
       </main>
     </div>
