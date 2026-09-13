@@ -1,8 +1,24 @@
-import React from "react";
+"use client"
 import Link from "next/link";
 import { MapPin, Search, ArrowRight } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
+import { signOut } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+
+  const router = useRouter();
+
+  const userData = authClient.useSession();
+  console.log(userData)
+  const user = userData?.data?.user
+
+  const handleSignOut = async() => {
+    await signOut();
+    router.push("/auth/login");
+    router.refresh();
+  }
+
   return (
     <header className="w-full bg-white border-b border-slate-100 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -57,22 +73,33 @@ export default function Navbar() {
         </div>
 
         {/* Right: Auth & Action Button */}
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/auth/login"
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors px-2 py-1.5"
-          >
-            Log in
-          </Link>
+        {user ? (
+          <div className="flex items-center gap-2">
+            <p>Dashboard</p>
+            <button onClick={handleSignOut}
+            className="bg-red-500 text-white p-2 rounded-md">
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-4">
+            <Link
+              href="/auth/login"
+              className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors px-2 py-1.5"
+            >
+              Log in
+            </Link>
+  
+            <Link
+              href="/auth/register"
+              className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition-colors shadow-sm"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
 
-          <Link
-            href="/auth/register"
-            className="inline-flex items-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition-colors shadow-sm"
-          >
-            <span>Get Started</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+         )}
 
       </div>
     </header>

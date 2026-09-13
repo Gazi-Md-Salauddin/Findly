@@ -9,7 +9,7 @@ if (!mongoUri){
 }
 
 const client = new MongoClient(mongoUri);
-const db = client.db("findly");
+const db = client.db("findly_db");
 
 export const auth = betterAuth({
     database: mongodbAdapter(db, {

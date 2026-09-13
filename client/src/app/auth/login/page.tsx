@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [serverError, setServerError] = useState<string | null>(null);
 
-  const router = useRouter;
+  const router = useRouter();
 
   const {
       register,
