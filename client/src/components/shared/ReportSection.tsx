@@ -25,7 +25,7 @@ export default function ReportActionCards() {
 
           <div className="mt-6">
             <Link
-              href="/report-lost"
+              href="/report-item"
               className="inline-flex items-center space-x-2 bg-white border border-red-200 text-red-600 hover:bg-red-50 font-medium px-5 py-2.5 rounded-xl text-sm transition-colors shadow-sm group"
             >
               <span>Report Lost Item</span>
@@ -52,7 +52,7 @@ export default function ReportActionCards() {
 
           <div className="mt-6">
             <Link
-              href="/report-found"
+              href="/report-item"
               className="inline-flex items-center space-x-2 bg-white border border-emerald-200 text-emerald-700 hover:bg-emerald-50 font-medium px-5 py-2.5 rounded-xl text-sm transition-colors shadow-sm group"
             >
               <span>Report Found Item</span>

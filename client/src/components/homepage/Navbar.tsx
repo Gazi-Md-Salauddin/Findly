@@ -10,7 +10,7 @@ export default function Navbar() {
   const router = useRouter();
 
   const userData = authClient.useSession();
-  console.log(userData)
+  
   const user = userData?.data?.user
 
   const handleSignOut = async() => {
@@ -75,7 +75,7 @@ export default function Navbar() {
         {/* Right: Auth & Action Button */}
         {user ? (
           <div className="flex items-center gap-2">
-            <p>Dashboard</p>
+            <Link href="/dashboard">Dashboard</Link>
             <button onClick={handleSignOut}
             className="bg-red-500 text-white p-2 rounded-md">
               Logout

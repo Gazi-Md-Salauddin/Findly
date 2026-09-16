@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import {
   Search,
@@ -7,8 +6,10 @@ import {
   CheckCircle2,
   Users,
   MapPin,
+  ArrowRight,
   Sparkles,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function Banner() {
   return (
@@ -57,14 +58,14 @@ export default function Banner() {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-4 pt-1">
-            <button className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3.5 rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm sm:text-base cursor-pointer">
+            <Link href="/report-item" className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3.5 rounded-2xl shadow-md shadow-blue-500/20 transition-all text-sm sm:text-base cursor-pointer">
               <PlusSquare className="w-4 h-4" />
-              <span>Report Lost Item</span>
-            </button>
-            <button className="inline-flex items-center space-x-2 bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 font-medium px-6 py-3.5 rounded-2xl transition-all text-sm sm:text-base shadow-sm cursor-pointer">
-              <PlusSquare className="w-4 h-4" />
-              <span>Report Found Item</span>
-            </button>
+              <span>Report Item</span>
+            </Link>
+            <Link href="/all-item" className="inline-flex items-center space-x-2 bg-white hover:bg-slate-50 text-blue-600 border border-blue-200 font-medium px-6 py-3.5 rounded-2xl transition-all text-sm sm:text-base shadow-sm cursor-pointer">
+              <span>Browse Item</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
 
           {/* Value Highlights / Features */}
@@ -105,7 +106,7 @@ export default function Banner() {
         <div className="lg:col-span-5 relative flex justify-center items-center py-6">
           
           {/* Organic Background Blobs */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-200/50 rounded-full filter blur-3xl -z-10 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-600/50 rounded-full filter blur-3xl -z-10 pointer-events-none" />
           
           {/* Location Pin Background Accent */}
           <div className="absolute top-4 right-10 z-0 text-blue-600 drop-shadow-lg">
@@ -124,7 +125,8 @@ export default function Banner() {
                 <Image
                   src="/images/wallet.jpg"
                   alt="Black Wallet"
-                  fill
+                  width={400}
+                  height={400}
                   className="object-cover"
                 />
               </div>
@@ -143,7 +145,8 @@ export default function Banner() {
                 <Image
                   src="/images/iphone13.jpeg"
                   alt="iPhone 13"
-                  fill
+                  width={400}
+                  height={400}
                   className="object-cover"
                 />
               </div>
