@@ -8,3 +8,8 @@ export const createItemService = async (itemData: any) => {
         ...itemData,
     };
 };
+
+export const getItemService = async () => {
+    const items = await itemsCollection.find().toArray();
+    return items;
+}
