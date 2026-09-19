@@ -64,7 +64,7 @@ export default function ReportPage() {
   });
   const [currentStep, setCurrentStep] = useState(1);
   const [reportType, setReportType] = useState<ReportType>("lost");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
 
   const router = useRouter();
 
@@ -87,15 +87,39 @@ export default function ReportPage() {
 
     if (!files) return;
 
-    const newImages = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    const newFiles = Array.from(files);
 
-    setImages((prev) => [...prev, ...newImages].slice(0, 5));
+    setImages((prev) => [...prev, ...newFiles].slice(0, 5));
   };
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const uploadImage = async (file: File) => {
+    const data = new FormData();
+
+    data.append("file", file);
+    data.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!
+    );
+
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Image upload failed");
+    }
+
+    const result = await response.json();
+
+    return result.secure_url;
   };
 
 
@@ -109,8 +133,19 @@ export default function ReportPage() {
   };
 
   // Submit function
-  const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (
+  e: React.MouseEvent<HTMLButtonElement>
+) => {
+  e.preventDefault();
+
+  try {
+    // Upload images to Cloudinary
+    const imageUrls: string[] = [];
+
+    for (const image of images) {
+      const url = await uploadImage(image);
+      imageUrls.push(url);
+    }
 
     const reportData = {
       title: formData.title,
@@ -124,18 +159,35 @@ export default function ReportPage() {
       color: formData.color,
       brand: formData.brand,
       notes: formData.notes,
+      images: imageUrls,
     };
 
-    const response = await fetch(`${process.env.PUBLIC_SERVER_URL}/api/posts`, {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify(reportData),
-    });
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify(reportData),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to create report");
+    }
+
+    console.log("server url:", `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`)
+
     const data = await response.json();
+
+    console.log("Report created:", data);
+
     router.push("/");
+  } catch (error) {
+    console.error("Submit error:", error);
   }
+};
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -529,11 +581,11 @@ export default function ReportPage() {
                   <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
                     {images.map((image, index) => (
                       <div
-                        key={image}
+                        key={index}
                         className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200"
                       >
                         <img
-                          src={image}
+                          src={URL.createObjectURL(image)}
                           alt={`Uploaded ${index + 1}`}
                           className="h-full w-full object-cover"
                         />
@@ -578,7 +630,7 @@ export default function ReportPage() {
                     <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-100">
                       {images[0] ? (
                         <img
-                          src={images[0]}
+                          src={URL.createObjectURL(images[0])}
                           alt="Item"
                           className="h-full w-full object-cover"
                         />
@@ -803,8 +855,8 @@ function SelectField({
 
       <div className="relative">
         <select name={name}
-        value={value}
-        onChange={onChange} className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm text-slate-500 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+          value={value}
+          onChange={onChange} className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm text-slate-500 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
           <option value="">{placeholder}</option>
           <option>Electronics</option>
           <option>Wallet & Accessories</option>
@@ -849,7 +901,7 @@ function SelectCity({
 
       <div className="relative">
         <select name={name} value={value}
-        onChange={onChange} className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm text-slate-500 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
+          onChange={onChange} className="h-11 w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 pr-10 text-sm text-slate-500 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50">
           <option value="">{placeholder}</option>
           <option>Dhaka</option>
           <option>Sylhet</option>

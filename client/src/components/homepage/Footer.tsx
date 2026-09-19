@@ -39,7 +39,7 @@ export default function FooterSection() {
             </p>
             <div className="pt-2">
               <Link
-                href="/report"
+                href="/report-item"
                 className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition-colors shadow-md shadow-blue-600/30 group"
               >
                 <span>Report an Item</span>
