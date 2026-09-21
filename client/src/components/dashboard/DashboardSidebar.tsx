@@ -10,6 +10,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer"
 import Link from "next/link";
+import {House, FileText, ShieldCheck, MessagesSquare, Bell, Settings} from 'lucide-react';
 import { usePathname } from "next/navigation";
 
 const DashboardSidebar = () => {
@@ -26,7 +27,7 @@ const DashboardSidebar = () => {
         }`}
         type="button" 
         href="/dashboard"
-      >Overview
+      ><House/>Overview
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
@@ -34,7 +35,7 @@ const DashboardSidebar = () => {
         }`}
         type="button"
         href="/dashboard/my-reports"
-      >My Reports
+      ><FileText/>My Reports
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
@@ -42,7 +43,7 @@ const DashboardSidebar = () => {
         }`}
         type="button"
         href="/dashboard/matches"
-      >Matches
+      ><ShieldCheck/>Matches
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
@@ -50,23 +51,23 @@ const DashboardSidebar = () => {
         }`}
         type="button"
         href="/dashboard/messages"
-      >Messages
+      ><MessagesSquare/>Messages
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
           pathName === "/dashboard/notifications" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/"
-      >Notifications
+        href="/dashboard/notifications"
+      ><Bell/>Notifications
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
           pathName === "/dashboard/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/"
-      >Settings
+        href="/dashboard/settings"
+      ><Settings/>Settings
       </Link>
     </nav>
   );

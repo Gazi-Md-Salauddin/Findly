@@ -3,11 +3,13 @@ import Link from "next/link";
 import { MapPin, Search, ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
 
   const router = useRouter();
+
+  const pathname = usePathname();
 
   const userData = authClient.useSession();
   
@@ -39,19 +41,25 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center space-x-6">
             <Link
               href="/all-item"
-              className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                pathname === "/all-item" ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-600"
+              }`}
             >
               Browse Items
             </Link>
             <Link
               href="/how-it-works"
-              className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                pathname === "/how-it-works" ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-600"
+              }`}
             >
               How it works
             </Link>
             <Link
               href="/safety"
-              className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
+              className={`text-sm font-medium hover:text-blue-600 transition-colors ${
+                pathname === "/safety" ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-600"
+              }`}
             >
               Safety
             </Link>

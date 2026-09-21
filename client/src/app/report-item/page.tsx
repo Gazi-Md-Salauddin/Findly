@@ -17,6 +17,7 @@ import {
   Upload,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type ReportType = "lost" | "found" | null;
 
@@ -55,6 +56,7 @@ export default function ReportPage() {
     type: "",
     category: "",
     color: "",
+    status: "",
     brand: "",
     city: "",
     area: "",
@@ -134,60 +136,61 @@ export default function ReportPage() {
 
   // Submit function
   const handleSubmit = async (
-  e: React.MouseEvent<HTMLButtonElement>
-) => {
-  e.preventDefault();
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
 
-  try {
-    // Upload images to Cloudinary
-    const imageUrls: string[] = [];
+    try {
+      // Upload images to Cloudinary
+      const imageUrls: string[] = [];
 
-    for (const image of images) {
-      const url = await uploadImage(image);
-      imageUrls.push(url);
-    }
-
-    const reportData = {
-      title: formData.title,
-      description: formData.description,
-      type: reportType,
-      city: formData.city,
-      area: formData.area,
-      date: formData.date,
-      time: formData.time,
-      category: formData.category,
-      color: formData.color,
-      brand: formData.brand,
-      notes: formData.notes,
-      images: imageUrls,
-    };
-
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`,
-      {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify(reportData),
+      for (const image of images) {
+        const url = await uploadImage(image);
+        imageUrls.push(url);
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to create report");
+      const reportData = {
+        title: formData.title,
+        description: formData.description,
+        type: reportType,
+        city: formData.city,
+        area: formData.area,
+        date: formData.date,
+        time: formData.time,
+        category: formData.category,
+        color: formData.color,
+        brand: formData.brand,
+        notes: formData.notes,
+        images: imageUrls,
+        status: "pending",
+      };
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`,
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(reportData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create report");
+      }
+
+      console.log("server url:", `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`)
+
+      const data = await response.json();
+
+      console.log("Report created:", data);
+
+      router.push("/");
+    } catch (error) {
+      console.error("Submit error:", error);
     }
-
-    console.log("server url:", `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`)
-
-    const data = await response.json();
-
-    console.log("Report created:", data);
-
-    router.push("/");
-  } catch (error) {
-    console.error("Submit error:", error);
-  }
-};
+  };
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -584,7 +587,7 @@ export default function ReportPage() {
                         key={index}
                         className="group relative aspect-square overflow-hidden rounded-xl border border-slate-200"
                       >
-                        <img
+                        <Image
                           src={URL.createObjectURL(image)}
                           alt={`Uploaded ${index + 1}`}
                           className="h-full w-full object-cover"
@@ -629,7 +632,7 @@ export default function ReportPage() {
                   <div className="flex gap-4 p-5">
                     <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-slate-100">
                       {images[0] ? (
-                        <img
+                        <Image
                           src={URL.createObjectURL(images[0])}
                           alt="Item"
                           className="h-full w-full object-cover"
