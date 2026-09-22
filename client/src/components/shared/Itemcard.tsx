@@ -6,10 +6,13 @@ import {
   Calendar,
   Heart,
   Clock,
+  ArrowRight,
 } from "lucide-react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface itemsData {
-    id: number;
+    _id: number;
     images: string[];
     title: string;
     type: string;
@@ -45,6 +48,9 @@ const Itemcard = ({ Item }: ItemProps) => {
       <p className="text-[11px] text-slate-400 px-1 mt-0.5 flex items-center gap-1">
         <MapPin className="w-3 h-3 text-slate-400 inline" />{Item.area}, {Item.city} • {Item.time}
       </p>
+      <Link href={`/all-item/${Item._id}`}>
+      <Button>View Details <ArrowRight className="transition-transform group-hover:translate-x-1"/></Button>
+      </Link>
     </div>
   );
 };
