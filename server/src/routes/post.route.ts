@@ -1,9 +1,15 @@
 import { Router } from 'express';
-import {createItem, getItem} from '../controllers/post.controller';
+import {createItem, getItem, getItemById} from '../controllers/post.controller';
 
 const router = Router();
 
-router.post("/", createItem);
+// Get all post and its by id
 router.get("/", getItem);
+router.get("/:id", getItemById);
+
+router.post("/", createItem);
+
+
+
 
 export default router;

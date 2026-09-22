@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { itemsCollection } from '../models/post.model';
 
 export const createItemService = async (itemData: any) => {
@@ -12,4 +13,11 @@ export const createItemService = async (itemData: any) => {
 export const getItemService = async () => {
     const items = await itemsCollection.find().toArray();
     return items;
+}
+// Get a single post by its MongoDB ID
+export const getItemByIdService = async (id: string) => {
+    const post = await itemsCollection.findOne({
+        _id: new ObjectId(id),
+    })
+    return post;
 }
