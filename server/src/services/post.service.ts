@@ -21,3 +21,15 @@ export const getItemByIdService = async (id: string) => {
     })
     return post;
 }
+
+// Delete post in dashboard
+export const deletePostService = async (id: string) => {
+    if (!ObjectId.isValid(id)) {
+        return null;
+    }
+
+    const result = await itemsCollection.deleteOne({
+        _id: new ObjectId(id),
+    });
+    return result;
+};

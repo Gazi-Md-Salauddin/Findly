@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { createItemService, getItemByIdService, getItemService } from '../services/post.service';
+import { createItemService, deletePostService, getItemByIdService, getItemService } from '../services/post.service';
 
 export const createItem = async (req: Request, res: Response) => {
     try {
@@ -37,13 +37,13 @@ export const getItem = async (req: Request, res: Response) => {
 }
 
 // Get item api by id
-export const getItemById = async (req: Request<{id: string}>, res: Response) => {
+export const getItemById = async (req: Request<{ id: string }>, res: Response) => {
     try {
         const { id } = req.params;
         const post = await getItemByIdService(id)
 
-        if(!post) {
-            return 
+        if (!post) {
+            return
             res.status(404).json({
                 success: false,
                 message: "Post not found",
@@ -58,6 +58,36 @@ export const getItemById = async (req: Request<{id: string}>, res: Response) => 
         res.status(500).json({
             success: false,
             message: "Failed to fetch post",
+        });
+    }
+};
+
+// Delete item api by id
+export const deleteItem = async (
+    req: Request<{ id: string }>,
+    res: Response
+) => {
+    try {
+        const { id } = req.params;
+
+        const result = await deletePostService(id);
+
+        if (!result || result.deletedCount == 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully",
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to delete post",
         });
     }
 };
