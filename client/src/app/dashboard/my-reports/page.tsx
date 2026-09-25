@@ -307,22 +307,7 @@ function MobileReportCard({ report }: { report: Report }) {
                     <MapPin size={14} />
                     {report.city}
                 </div>
-
-                {/* <div className="flex gap-2">
-                    <button className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-700">
-                        View
-                    </button>
-
-                    <button className="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white">
-                        Edit
-                    </button>
-                </div> */}
             </div>
         </div>
     );
 }
-
-
-
-
-

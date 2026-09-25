@@ -61,7 +61,7 @@ export default async function BrowseItemsPage() {
   // };
 
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
       {data.data.map((Item) => (
         <Itemcard key={Item._id} Item={Item} />
 

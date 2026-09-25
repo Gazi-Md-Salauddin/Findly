@@ -590,6 +590,8 @@ export default function ReportPage() {
                         <Image
                           src={URL.createObjectURL(image)}
                           alt={`Uploaded ${index + 1}`}
+                          width={20}
+                          height={20}
                           className="h-full w-full object-cover"
                         />
 
@@ -635,6 +637,8 @@ export default function ReportPage() {
                         <Image
                           src={URL.createObjectURL(images[0])}
                           alt="Item"
+                          width={20}
+                          height={20}
                           className="h-full w-full object-cover"
                         />
                       ) : (

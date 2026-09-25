@@ -44,8 +44,8 @@ const Itemcard = ({ Item }: ItemProps) => {
           className="object-contain"
         />
       </div>
-      <h3 className="text-sm font-bold text-slate-900 px-1">{Item.title}</h3>
-      <p className="text-[11px] text-slate-400 px-1 mt-0.5 flex items-center gap-1">
+      <h3 className="text-xl font-bold text-slate-900 px-1">{Item.title}</h3>
+      <p className="text-md text-slate-400 py-2 mt-2 flex items-center gap-1">
         <MapPin className="w-3 h-3 text-slate-400 inline" />{Item.area}, {Item.city} • {Item.time}
       </p>
       <Link href={`/all-item/${Item._id}`}>

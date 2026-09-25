@@ -9,6 +9,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import React from "react";
+import { authClient } from "@/lib/auth-client";
 
 interface Report {
   _id: string;
@@ -80,7 +81,6 @@ export default async function ReportDetailsPage({
 }: {
   params: Promise<{id: string }>;
 } ) {
-
   const { id } = await params;
 
   const response = await fetch(
@@ -101,7 +101,7 @@ console.log("API Result:", data);
   // console.log("API DATA:", data);
   return (
     <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
 
         {/* Back */}
         <Link
@@ -128,15 +128,15 @@ console.log("API Result:", data);
                   width={800}
                   height={800}
                   
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
 
               {/* Thumbnails */}
               <div className="mt-3 flex gap-2">
-                {data.images?.map((image, index) => (
+                {data.images?.map((images, index) => (
                   <div
-                    key={image}
+                    key={images}
                     className="relative h-16 w-16 overflow-hidden rounded-md border border-slate-200"
                   >
                     <Image
@@ -154,11 +154,11 @@ console.log("API Result:", data);
             {/* Report Details */}
             <section className="rounded-xl border border-slate-200 bg-white p-5">
 
-              <h2 className="mb-4 text-sm font-bold text-slate-900">
+              <h2 className="mb-4 text-md font-bold text-slate-900">
                 Report Details
               </h2>
 
-              <div className="space-y-3 text-xs">
+              <div className="space-y-3 text-sm">
 
                 <DetailRow
                   label="Category"
@@ -191,7 +191,7 @@ console.log("API Result:", data);
 
                 <DetailRow
                   label="Reported by"
-                  value={data.reportedBy}
+                  value={data._id}
                 />
 
               </div>

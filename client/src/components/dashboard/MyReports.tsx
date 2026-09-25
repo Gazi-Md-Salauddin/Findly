@@ -3,6 +3,7 @@ import React from 'react';
 import StatusBadge from './StatusBadge';
 import DeleteModal from './DeleteModal';
 import Actionmenu from './Actionmenu';
+import Image from 'next/image';
 
 type ReportType = "lost" | "found";
 
@@ -62,10 +63,12 @@ const MyReports = ({ report }: ReportProps) => {
             {/* Item */}
             <td className="px-5 py-4">
                 <div className="flex items-center gap-3">
-                    <img
+                    <Image
                         src={report.images[0]}
                         alt={report.title}
-                        className="h-12 w-12 rounded-xl object-cover"
+                        width={30}
+                        height={30}
+                        className="rounded-xl object-cover"
                     />
 
                     <div>
@@ -121,7 +124,7 @@ const MyReports = ({ report }: ReportProps) => {
                         icon={<Edit3 size={16} />}
                         label="Edit"
                     />
-                    <DeleteModal />
+                    <DeleteModal id={report._id}/>
                     <Actionmenu />
                 </div>
             </td>
