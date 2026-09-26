@@ -9,7 +9,6 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import React from "react";
-import { authClient } from "@/lib/auth-client";
 
 interface Report {
   _id: string;
@@ -134,20 +133,20 @@ console.log("API Result:", data);
 
               {/* Thumbnails */}
               <div className="mt-3 flex gap-2">
-                {data.images?.map((images, index) => (
+                {data.images?.map((image: string, index: number) => (
                   <div
-                    key={images}
+                    key={image}
                     className="relative h-16 w-16 overflow-hidden rounded-md border border-slate-200"
                   >
                     <Image
-                      src={data.images[0]}
+                      src={image}
                       alt={`${data.title}-${index + 1}`}
                       width={56}
                       height={56}
                       className="object-cover"
                     />
                   </div>
-                ))}
+                 ))}
               </div>
             </section>
 

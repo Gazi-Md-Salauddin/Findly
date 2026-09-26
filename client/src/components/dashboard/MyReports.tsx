@@ -7,6 +7,8 @@ import Image from 'next/image';
 
 type ReportType = "lost" | "found";
 
+type ReportStatus = "active" | "pending" | "claimed" | "resolved" | "rejected";
+
 interface report {
     _id: string;
     images: string[];
@@ -24,9 +26,7 @@ interface ReportProps {
 }
 
 
-const MyReports = ({ report }: ReportProps) => {
-
-    function TypeBadge({ type }: { type: ReportType }) {
+function TypeBadge({ type }: { type: ReportType }) {
         return (
             <span
                 className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${type === "lost"
@@ -40,7 +40,7 @@ const MyReports = ({ report }: ReportProps) => {
     }
 
 
-    function ActionButton({
+function ActionButton({
         icon,
         label,
     }: {
@@ -57,6 +57,8 @@ const MyReports = ({ report }: ReportProps) => {
         );
     }
 
+
+const MyReports = ({ report }: ReportProps) => {
 
     return (
         <tr className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50">

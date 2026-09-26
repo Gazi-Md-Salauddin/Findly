@@ -19,6 +19,22 @@ import Itemcard from "../../components/shared/Itemcard";
 //   "Other",
 // ];
 
+interface Posts {
+  _id: number;
+  title: string;
+  description: string;
+  type: "lost" | "found";
+  city: string;
+  area: string;
+  date: string;
+  time: string;
+  category: string;
+  color?: string;
+  brand?: string;
+  notes?: string;
+  images: string[];
+}
+
 interface ItemResponse {
   success: boolean;
   message: string;

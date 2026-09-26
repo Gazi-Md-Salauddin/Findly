@@ -17,9 +17,10 @@ import Image from "next/image";
 interface Report {
     _id: string;
     title: string;
-    type: string;
+    type: "lost" | "found";
     category: string;
     city: string;
+    area: string;
     date: string;
     status: string;
     images: string[];
@@ -169,7 +170,7 @@ export default async function MyReportsPage() {
                             </thead>
 
                             <tbody>
-                                {data.map((report) => (
+                                {data.map((report: Report) => (
                                     <MyReports key={report._id} report={report} />
                                 ))}
                             </tbody>
@@ -178,7 +179,7 @@ export default async function MyReportsPage() {
 
                     {/* Mobile Cards */}
                     <div className="divide-y divide-slate-100 md:hidden">
-                        {data.map((report) => (
+                        {data.map((report: Report) => (
                             <MobileReportCard
                                 key={report._id}
                                 report={report}
