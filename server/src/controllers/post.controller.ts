@@ -1,5 +1,5 @@
 import { type Request, type Response } from 'express';
-import { createItemService, deletePostService, getItemByIdService, getItemService } from '../services/post.service';
+import { createItemService, deletePostService, getItemByIdService, getItemService, updatePostService } from '../services/post.service';
 
 export const createItem = async (req: Request, res: Response) => {
     try {
@@ -58,6 +58,40 @@ export const getItemById = async (req: Request<{ id: string }>, res: Response) =
         res.status(500).json({
             success: false,
             message: "Failed to fetch post",
+        });
+    }
+};
+
+// Update item api by id
+export const updateItem = async (
+    req: Request<{ id: string }>,
+    res: Response
+) => {
+    try {
+        const { id } = req.params;
+
+        const updateData = req.body;
+
+        const updatedPost = await updatePostService(id, updateData);
+
+        if(!updatedPost) {
+            return res.status(404).json({
+                success: false,
+                message: "Post not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Post updated successfully",
+            data: updatedPost,
+        });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to update post"
         });
     }
 };

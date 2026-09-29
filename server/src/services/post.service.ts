@@ -22,6 +22,36 @@ export const getItemByIdService = async (id: string) => {
     return post;
 }
 
+
+// update post in dashboard
+export const updatePostService = async (id: string,
+    updateData: any
+) => {
+    if (!ObjectId.isValid(id)) {
+        return null;
+    }
+
+    const result = await itemsCollection.updateOne(
+        {
+            _id: new ObjectId(id),
+        },
+        {
+            $set: updateData,
+        }
+    );
+
+    if (result.matchedCount === 0)
+    {
+        return null;
+    }
+
+    const updatePost = await itemsCollection.findOne({
+        _id: new ObjectId(id),
+    });
+    
+    return updatePost;
+}
+
 // Delete post in dashboard
 export const deletePostService = async (id: string) => {
     if (!ObjectId.isValid(id)) {
