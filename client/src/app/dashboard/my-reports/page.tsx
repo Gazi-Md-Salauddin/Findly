@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
+type ReportStatus = "active" | "pending" | "claimed" | "resolved" | "rejected";
+
 interface Report {
     _id: string;
     title: string;
@@ -22,7 +24,7 @@ interface Report {
     city: string;
     area: string;
     date: string;
-    status: string;
+    status: ReportStatus;
     images: string[];
 }
 

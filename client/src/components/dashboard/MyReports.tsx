@@ -2,14 +2,16 @@ import { CalendarDays, Edit3, Eye, MapPin } from 'lucide-react';
 import React from 'react';
 import StatusBadge from './StatusBadge';
 import DeleteModal from './DeleteModal';
+import EditItem from './EditItem';
 import Actionmenu from './Actionmenu';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type ReportType = "lost" | "found";
 
 type ReportStatus = "active" | "pending" | "claimed" | "resolved" | "rejected";
 
-interface report {
+interface Report {
     _id: string;
     images: string[];
     title: string;
@@ -22,40 +24,43 @@ interface report {
 }
 
 interface ReportProps {
-    report: report;
+    report: Report;
 }
 
 
 function TypeBadge({ type }: { type: ReportType }) {
-        return (
-            <span
-                className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${type === "lost"
-                    ? "bg-red-50 text-red-700"
-                    : "bg-green-50 text-green-700"
-                    }`}
-            >
-                {type === "lost" ? "Lost" : "Found"}
-            </span>
-        );
-    }
+    return (
+        <span
+            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${type === "lost"
+                ? "bg-red-50 text-red-700"
+                : "bg-green-50 text-green-700"
+                }`}
+        >
+            {type === "lost" ? "Lost" : "Found"}
+        </span>
+    );
+}
 
 
 function ActionButton({
-        icon,
-        label,
-    }: {
-        icon: React.ReactNode;
-        label: string;
-    }) {
-        return (
-            <button
-                title={label}
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700"
-            >
-                {icon}
-            </button>
-        );
-    }
+    icon,
+    label,
+    href,
+}: {
+    icon: React.ReactNode;
+    label: string;
+    href: string;
+}) {
+    return (
+        <Link href={href}
+            title={label}
+            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+        >
+            {icon}
+
+        </Link>
+    );
+}
 
 
 const MyReports = ({ report }: ReportProps) => {
@@ -68,9 +73,9 @@ const MyReports = ({ report }: ReportProps) => {
                     <Image
                         src={report.images[0]}
                         alt={report.title}
-                        width={30}
-                        height={30}
-                        className="rounded-xl object-cover"
+                        width={40}
+                        height={40}
+                        className="rounded-md object-cover"
                     />
 
                     <div>
@@ -120,13 +125,16 @@ const MyReports = ({ report }: ReportProps) => {
                     <ActionButton
                         icon={<Eye size={16} />}
                         label="View"
+                        href={`/all-item/${report._id}`}
                     />
 
-                    <ActionButton
+                    {/* <ActionButton
                         icon={<Edit3 size={16} />}
                         label="Edit"
-                    />
-                    <DeleteModal id={report._id}/>
+                        href="/dashboard"
+                    /> */}
+                    <EditItem id={report._id}/>
+                    <DeleteModal id={report._id} />
                     <Actionmenu />
                 </div>
             </td>
