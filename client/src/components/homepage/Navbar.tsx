@@ -83,7 +83,7 @@ export default function Navbar() {
         {/* Right: Auth & Action Button */}
         {user ? (
           <div className="flex items-center gap-2">
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard/user">Dashboard</Link>
             <button onClick={handleSignOut}
             className="bg-red-500 text-white p-2 rounded-md">
               Logout

@@ -23,50 +23,50 @@ const DashboardSidebar = () => {
 
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button" 
-        href="/dashboard"
+        href="/dashboard/user"
       ><House/>Overview
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard/my-reports" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user/my-reports" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/dashboard/my-reports"
+        href="/dashboard/user/my-reports"
       ><FileText/>My Reports
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard/matches" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user/matches" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/dashboard/matches"
+        href="/dashboard/user/matches"
       ><ShieldCheck/>Matches
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard/messages" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user/messages" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/dashboard/messages"
+        href="/dashboard/user/messages"
       ><MessagesSquare/>Messages
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard/notifications" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user/notifications" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/dashboard/notifications"
+        href="/dashboard/user/notifications"
       ><Bell/>Notifications
       </Link>
       <Link
         className={`flex items-center gap-3 rounded-xl px-2 py-2.5 text-xl text-foreground transition-colors ${
-          pathName === "/dashboard/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
+          pathName === "/dashboard/user/settings" ? "bg-blue-500 text-white" : "hover:bg-blue-200"
         }`}
         type="button"
-        href="/dashboard/settings"
+        href="/dashboard/user/settings"
       ><Settings/>Settings
       </Link>
     </nav>

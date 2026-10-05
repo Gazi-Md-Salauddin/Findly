@@ -11,9 +11,30 @@ export const getPosts = async () => {
   return response.json();
 };
 
+
+// For GET post by id
+export const getpostsById = async (id: string) => {
+
+  const response = await fetch(
+    `${API_URL}/api/posts/${id}`
+  )
+  console.log("Response:", response);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch server")
+  }
+
+  const result = await response.json();
+
+  return result.data;
+
+  
+
+}
+
 // For create post
 export const createpost = async (reportData: unknown) => {
-  
+
   const response = await fetch(
     `${API_URL}/api/posts`,
     {

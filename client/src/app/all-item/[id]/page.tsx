@@ -9,13 +9,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import React from "react";
+import { getpostsById } from "@/api/posts.api";
 
 interface Report {
   _id: string;
   title: string;
   type: "lost" | "found";
   category: string;
-  location: string;
+  city: string;
+  area: string;
   date: string;
   time: string;
   status: "pending" | "claimed";
@@ -78,23 +80,34 @@ const similarItems: SimilarItem[] = [
 export default async function ReportDetailsPage({
   params,
 }: {
-  params: Promise<{id: string }>;
-} ) {
+  params: Promise<{ id: string }>;
+}) {
+
   const { id } = await params;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts/${id}`
-  )
-  console.log("Response:", response);
+  const data: Report = await getpostsById(id)
 
-const result = await response.json();
-const data = result.data;
+  // const result = await response.json();
+  // const data = result.data;
 
-console.log("API Result:", data);
+  console.log("API Result:", data);
 
-  if(!response.ok) {
-    throw new Error("Failed to fetch server")
-  }
+  
+  // const { id } = await params;
+
+  // const response = await fetch(
+  //   `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts/${id}`
+  // )
+  // console.log("Response:", response);
+
+  // const result = await response.json();
+  // const data = result.data;
+
+  // console.log("API Result:", data);
+
+  // if (!response.ok) {
+  //   throw new Error("Failed to fetch server")
+  // }
 
   // const data: Report = await response.json()
   // console.log("API DATA:", data);
@@ -120,13 +133,13 @@ console.log("API Result:", data);
             <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
 
               {/* Image */}
-              <div className="relative aspect-4/3 overflow-hidden rounded-lg bg-slate-100">
+              <div className="relative overflow-hidden rounded-lg bg-slate-100">
                 <Image
                   src={data?.images?.[0] || "/images/placeholder.jpg"}
                   alt={data.title}
-                  width={800}
-                  height={800}
-                  
+                  width={600}
+                  height={600}
+
                   className="object-contain"
                 />
               </div>
@@ -146,7 +159,7 @@ console.log("API Result:", data);
                       className="object-cover"
                     />
                   </div>
-                 ))}
+                ))}
               </div>
             </section>
 
@@ -182,7 +195,14 @@ console.log("API Result:", data);
                 <DetailRow
                   label="Type"
                   value={
-                    <span className="font-semibold text-red-500">
+                    <span className={`font-semibold ${
+                      data.type === "lost" ? (
+                        "text-red-500"
+                      ) :
+                      (
+                        "text-green-500"
+                      )
+                    }`}>
                       ● {data.type}
                     </span>
                   }
@@ -198,7 +218,7 @@ console.log("API Result:", data);
             </section>
           </div>
 
-          {/* RIGHT */}
+          {/* RIGHT Side */}
           <div className="space-y-5">
 
             {/* Claim */}
@@ -206,8 +226,15 @@ console.log("API Result:", data);
 
               <div className="mb-4">
                 <div className="mb-2 flex items-center gap-2">
-                  <span className="rounded-md bg-red-500 px-2 py-1 text-xs font-bold uppercase text-white">
-                    Lost
+                  <span className={`rounded-md  px-2 py-1 text-xs font-bold uppercase text-white ${
+                    data.type === "lost" ? (
+                      "bg-red-500"
+                    ) :
+                    ("bg-green-500"
+
+                    )
+                  }`}>
+                    {data.type}
                   </span>
 
                   <span className="text-xs text-slate-400">
@@ -246,9 +273,16 @@ console.log("API Result:", data);
                 Think this is yours?
               </h2>
 
+              {data.type === "lost" ? (
               <button className="mt-3 w-full rounded-md bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700">
                 Claim this item
               </button>
+
+              ) : (
+                <button className="mt-3 w-full rounded-md bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700">
+                find this item
+              </button>
+              )}
 
               <button className="mt-2 w-full rounded-md border border-blue-300 px-4 py-2.5 text-xs font-semibold text-blue-600 hover:bg-blue-50">
                 Report incorrect information
