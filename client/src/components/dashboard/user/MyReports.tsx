@@ -1,9 +1,8 @@
-import { CalendarDays, Edit3, Eye, MapPin } from 'lucide-react';
+import { CalendarDays, Eye, MapPin } from 'lucide-react';
 import React from 'react';
-import StatusBadge from './StatusBadge';
+import StatusBadge from '../StatusBadge';
 import DeleteModal from './DeleteModal';
 import EditItem from './EditItem';
-import Actionmenu from './Actionmenu';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -127,15 +126,9 @@ const MyReports = ({ report }: ReportProps) => {
                         label="View"
                         href={`/all-item/${report._id}`}
                     />
-
-                    {/* <ActionButton
-                        icon={<Edit3 size={16} />}
-                        label="Edit"
-                        href="/dashboard"
-                    /> */}
-                    <EditItem id={report._id}/>
+                    <EditItem report={report} />
                     <DeleteModal id={report._id} />
-                    <Actionmenu />
+                    
                 </div>
             </td>
         </tr>

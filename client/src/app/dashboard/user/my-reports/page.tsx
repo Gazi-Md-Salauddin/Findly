@@ -1,6 +1,7 @@
 
-import MyReports from "@/components/dashboard/MyReports";
-import StatCard from "@/components/dashboard/StatCard";
+import { getPosts } from "@/api/posts.api";
+import MyReports from "@/components/dashboard/user/MyReports";
+import StatCard from "@/components/dashboard/user/StatCard";
 import {
     CalendarDays,
     ChevronDown,
@@ -10,7 +11,6 @@ import {
     MoreHorizontal,
     Plus,
     Search,
-    Trash2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -47,16 +47,7 @@ export default async function MyReportsPage() {
     //     return matchesType && matchesSearch;
     // });
 
-    const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`
-    );
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch posts")
-    }
-
-    const result = await response.json();
-    const data = result.data;
+    const data = await getPosts();
 
     console.log("my reports:", data)
 
@@ -172,7 +163,7 @@ export default async function MyReportsPage() {
                             </thead>
 
                             <tbody>
-                                {data.map((report: Report) => (
+                                {data.data.map((report: Report) => (
                                     <MyReports key={report._id} report={report} />
                                 ))}
                             </tbody>
@@ -181,7 +172,7 @@ export default async function MyReportsPage() {
 
                     {/* Mobile Cards */}
                     <div className="divide-y divide-slate-100 md:hidden">
-                        {data.map((report: Report) => (
+                        {data.data.map((report: Report) => (
                             <MobileReportCard
                                 key={report._id}
                                 report={report}

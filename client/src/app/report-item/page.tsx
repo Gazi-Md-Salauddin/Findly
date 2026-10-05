@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { createpost } from "@/api/posts.api";
 
 type ReportType = "lost" | "found" | null;
 
@@ -165,24 +166,7 @@ export default function ReportPage() {
         status: "pending",
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`,
-        {
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(reportData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to create report");
-      }
-
-      console.log("server url:", `${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts`)
-
-      const data = await response.json();
+      const data = await createpost(reportData)
 
       console.log("Report created:", data);
 

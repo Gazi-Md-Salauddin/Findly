@@ -1,6 +1,6 @@
 import { PlusSquare } from 'lucide-react';
 import Link from 'next/link';
-import StatCard from '@/components/dashboard/StatCard';
+import StatCard from '@/components/dashboard/user/StatCard';
 
 const DashboardPage = () => {
     return (

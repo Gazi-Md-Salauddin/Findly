@@ -1,4 +1,5 @@
 "use client"
+import { deletePost } from "@/api/posts.api";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,20 +26,9 @@ export default function DeleteModal({ id }: DeleteModalProps) {
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/posts/${id}`,
-        {
-          method: "DELETE",
-        } 
-      );
-
-      const result = await response.json();
-      
-
-      if(!response.ok) {
-        throw new Error(result.message || "Failed to delete post");
-      }
+      await deletePost(id)
       router.refresh()
-      console.log(result);
+      
     } catch (error) {
       console.error(error)
     }
